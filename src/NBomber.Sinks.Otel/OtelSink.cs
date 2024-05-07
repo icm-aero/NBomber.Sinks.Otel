@@ -4,40 +4,39 @@ using NBomber.Contracts.Stats;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 
-namespace NBomber.Sinks.Prometheus;
+namespace NBomber.Sinks.Otel;
 
-public sealed class PrometheusSink : IReportingSink
+public sealed class OtelSink : IReportingSink
 {
-    public string SinkName => "NBomber.Sinks.Prometheus";
+    public string SinkName => "NBomber.Sinks.Otel";
 
 
     public Task Init(IBaseContext context, IConfiguration infraConfig)
     {
         _context = context;
 
-        var config = new PrometheusSinkConfig();
-        if (infraConfig.GetSection(nameof(PrometheusSink)).Exists())
-        {
-            BindConfigurationSection(infraConfig, config);
-        }
+        var config = new OtelSinkConfig();
+        //if (infraConfig.GetSection(nameof(OtelSink)).Exists())
+        //{
+        //    BindConfigurationSection(infraConfig, config);
+        //}
 
         var httpListenerAddresses =
             string.Join(", ", config.HttpListenerPrefixes.Select(prefix => $"{prefix}{config.ScrapeEndpointPath}"));
 
-        _context.Logger.Information(
-            "{SinkName} listens at those addresses: {HttpListenerPrefixes}",
-            SinkName,
-            httpListenerAddresses);
+        _context.Logger.Information("Using {SinkName}", SinkName);
+
+        //_context.Logger.Information(
+        //    "{SinkName} listens at those addresses: {HttpListenerPrefixes}",
+        //    SinkName,
+        //    httpListenerAddresses);
 
         _customTags = config.CustomTags.Select(tag => new KeyValuePair<string, object?>(tag.Key, tag.Value)).ToArray();
 
         _meterProvider = Sdk.CreateMeterProviderBuilder()
             .AddMeter(AppDiagnostics.Meter.Name)
-            .AddPrometheusHttpListener(options =>
-            {
-                options.ScrapeEndpointPath = config.ScrapeEndpointPath;
-                options.UriPrefixes = config.HttpListenerPrefixes;
-            })
+            //.AddConsoleExporter()
+            .AddOtlpExporter()
             .Build();
 
         return Task.CompletedTask;
@@ -73,20 +72,20 @@ public sealed class PrometheusSink : IReportingSink
     }
 
 
-    private static void BindConfigurationSection(IConfiguration infraConfig, PrometheusSinkConfig config)
-    {
-        var httpListenerPrefixesExists = infraConfig
-            .GetSection(nameof(PrometheusSink))
-            .GetSection("HttpListenerPrefixes")
-            .Exists();
+    //private static void BindConfigurationSection(IConfiguration infraConfig, OtelSinkConfig config)
+    //{
+    //    var httpListenerPrefixesExists = infraConfig
+    //        .GetSection(nameof(OtelSink))
+    //        .GetSection("HttpListenerPrefixes")
+    //        .Exists();
 
-        if (httpListenerPrefixesExists)
-        {
-            config.HttpListenerPrefixes = null!;
-        }
+    //    if (httpListenerPrefixesExists)
+    //    {
+    //        config.HttpListenerPrefixes = null!;
+    //    }
 
-        infraConfig.GetSection(nameof(PrometheusSink)).Bind(config);
-    }
+    //    infraConfig.GetSection(nameof(OtelSink)).Bind(config);
+    //}
 
     private Task SaveScenarioStats(ScenarioStats[] stats)
     {

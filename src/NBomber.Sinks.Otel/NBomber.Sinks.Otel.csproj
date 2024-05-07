@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-	<RepositoryUrl>https://github.com/YevheniiNikitin/NBomber.Sinks.Prometheus</RepositoryUrl>
-	<Title>NBomber.Sinks.Prometheus</Title>
-	<Description>NBomber sink that exposes a metric endpoint for Prometheus to scrape.</Description>
+	<RepositoryUrl>https://github.com/icm-aero/NBomber.Sinks.Otel.git</RepositoryUrl>
+	<Title>NBomber.Sinks.Otel</Title>
+	<Description>NBomber sink that exposes a metric endpoint for Otel to scrape.</Description>
 	<Authors>Yevhenii Nikitin</Authors>
   </PropertyGroup>
 
@@ -19,7 +19,7 @@
 
   <ItemGroup>
   	<PackageReference Include="NBomber.Contracts" Version="5.1.0" />
-  	<PackageReference Include="OpenTelemetry.Exporter.Prometheus.HttpListener" Version="1.6.0-alpha.1" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.8.1" />
   </ItemGroup>
 
 </Project>

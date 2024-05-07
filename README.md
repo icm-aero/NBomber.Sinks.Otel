@@ -1,42 +1,42 @@
-# NBomber Prometheus Sink
+# NBomber Otel Sink
 
-NBomber Prometheus Sink is a custom sink for NBomber load-testing framework. It integrates with Prometheus, a popular monitoring and alerting toolkit, allowing you to collect and visualize load testing metrics.
+NBomber Otel Sink is a custom sink for NBomber load-testing framework. It integrates with Otel, a popular monitoring and alerting toolkit, allowing you to collect and visualize load testing metrics.
 
 ## Features
 
-- Integrates NBomber with Prometheus for monitoring load test metrics.
+- Integrates NBomber with Otel for monitoring load test metrics.
 - Provides predefined metrics for request latency, request counts, RPS, and more.
 - Supports custom tags for fine-grained metric grouping.
 - Easy setup and configuration.
 
 ### Installation
 
-You can install the NBomber Prometheus Sink via NuGet. Run the following command in the NuGet Package Manager Console:
+You can install the NBomber Otel Sink via NuGet. Run the following command in the NuGet Package Manager Console:
 ```code
-PM> Install-Package NBomber.Sinks.Prometheus
+PM> Install-Package NBomber.Sinks.Otel
 ```
 
 ### Usage
 
-To use the NBomber Prometheus Sink, follow these steps:
+To use the NBomber Otel Sink, follow these steps:
 
 1. Set up your load test scenario using NBomber.
 
-2. Configure NBomber to use the Prometheus sink. Refer to the NBomber documentation for information on how to configure sinks.
+2. Configure NBomber to use the Otel sink. Refer to the NBomber documentation for information on how to configure sinks.
 
-3. Configure Prometheus job to scrape metrics from the NBomber Prometheus sink.
+3. Configure Otel job to scrape metrics from the NBomber Otel sink.
 
 4. Run your load test.
 
-For more details on configuring and using the NBomber Prometheus Sink, refer to the [samples](samples).
+For more details on configuring and using the NBomber Otel Sink, refer to the [samples](samples).
 
 ## Code Samples
 
-Here's an example of how to set up a load test scenario with the NBomber Prometheus Sink:
+Here's an example of how to set up a load test scenario with the NBomber Otel Sink:
 
 ```csharp
-// Create a Prometheus Sink
-var prometheusSink = new PrometheusSink();
+// Create a Otel Sink
+var OtelSink = new OtelSink();
 
 // Configure your scenario
 var scenario = Scenario.Create("MyScenario", RadclientAuthenticateUser);
@@ -45,7 +45,7 @@ var scenario = Scenario.Create("MyScenario", RadclientAuthenticateUser);
 NBomberRunner
     .RegisterScenarios(scenario)
     .WithReportingInterval(TimeSpan.FromSeconds(10)) // Default OpenTelemetry exporter reporting interval
-    .WithReportingSinks(prometheusSink)
+    .WithReportingSinks(OtelSink)
     .Run()
 ```
 
@@ -53,6 +53,6 @@ For more code samples and examples, please refer to the [samples](samples) direc
 
 ## How it works
 
-NBomber.Sinks.Prometheus utilizes [OpenTelemetry.Exporter.Prometheus.HttpListener](https://github.com/open-telemetry/opentelemetry-dotnet/tree/main/src/OpenTelemetry.Exporter.Prometheus.HttpListener) to export metrics.
-During the execution of your load test, the sink creates an HttpListener instance that listens on the `http://localhost:9464/metrics` endpoint by default.
-Subsequently, the Prometheus job scrapes metrics by calling the endpoint.
+NBomber.Sinks.Otel utilizes OpenTelemetry.Exporter.OpenTelemetryProtocol to export metrics.
+During the execution of your load test, the sink creates an OTLP instance that listens on the `http://localhost:9464/metrics` endpoint by default.
+Subsequently, the Otel job scrapes metrics by calling the endpoint.

@@ -1,5 +1,5 @@
 {
-  "PrometheusSink": {
+  "OtelSink": {
     "HttpListenerPrefixes": [
       "http://localhost:9500"
     ],

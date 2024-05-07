@@ -1,4 +1,4 @@
-﻿namespace NBomber.Sinks.Prometheus;
+﻿namespace NBomber.Sinks.Otel;
 
 public sealed record CustomTag
 {
